@@ -447,7 +447,8 @@ int xp_is_invalid(void)
 const char *xp_get_value(const char *name)
 {
     int index = 0;
-    static char buffer[XP_MAX_FILE_LEN + 1];
+    char buffer[XP_MAX_FILE_LEN + 1];
+    static char unescaped_buffer[XP_MAX_FILE_LEN + 1];
     char *ptr, *end, *check;
 
     end = xp_find_start_tag_end(xp_position[xp_stack] + 1);
@@ -531,7 +532,8 @@ const char *xp_get_value(const char *name)
                     return NULL;
             }
             buffer[index] = 0;
-            return buffer;
+            xp_unescape(buffer, unescaped_buffer);
+            return unescaped_buffer;
         }
     }
     return NULL;
